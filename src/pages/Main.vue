@@ -1,6 +1,6 @@
 <template>
 	<div class="outSide">
-		<div class="logo">Jimmy Notes</div>
+		<div class="logo">Notes</div>
 		<div 
 		class="canvasOutside" 
 		:style="canvasHeight" 
@@ -8,7 +8,12 @@
 		@touchmove="handleTouchMove"
 		@touchend="handleTouchEnd"
 		>
-        	<canvas class="canvasMain" ref="myCanvas"></canvas>
+        	<canvas class="canvasMain" 
+        			ref="myCanvas" 
+        			:width="canvasWidth" 
+        			:height="canvassHeight">
+        			阁下的浏览器版本不支持当前应用，请使用更加新的浏览器版本
+        	</canvas>
     	</div>
     	<div class="option">
     		<select class="optionLeft" v-model="color">
@@ -40,6 +45,7 @@ export default{
 	data(){
 		return{
 			status:'Eraser',
+			colorObj:[{color:'white',show:'White(Eraser)'},{color:'black',show:'Color(Black)'},{color:'red',show:'Color(Red)'},{color:'Blue',show:'Color(Blue)'},{color:'Green',show:'Color(Green)'},{color:'Purple',show:'Color(Purple)'}],
 			xs:'',
 			ys:'',
 			xe:'',
@@ -51,7 +57,9 @@ export default{
 			context:'',
 			isMouseDown:false,
 			adjust:'',
-			saveStatus:[]
+			saveStatus:[],
+			canvassHeight:500,
+			canvasWidth:300
 		}
 	},
 	computed:{
@@ -108,10 +116,10 @@ export default{
 			num2 = (num2 - this.adjust.top) * (this.canvasDom.height / this.adjust.height);
 			num3 = (num3 - this.adjust.left) * (this.canvasDom.width / this.adjust.width);
 			num4 = (num4 - this.adjust.top) * (this.canvasDom.height / this.adjust.height);
-			console.log('初始X'+num1);
-            console.log('初始Y'+num2);
-            console.log('移动X'+num3);
-           	console.log('移动Y'+num4);
+			//console.log('初始X'+num1);
+            //console.log('初始Y'+num2);
+            //console.log('移动X'+num3);
+           	//console.log('移动Y'+num4);
             //开启新的路径
             if(this.flag)
             this.context.beginPath();
@@ -133,6 +141,9 @@ export default{
 	mounted(){
 		this.canvasDom = this.$refs.myCanvas;
 		this.context = this.canvasDom.getContext("2d");
+		this.canvasWidth = document.documentElement.clientWidth;
+		this.canvassHeight = document.documentElement.clientHeight;
+
 	}
 
 
@@ -149,9 +160,7 @@ export default{
 			position relative
 			top .12rem
 			border 1px solid black
-			.canvasMain
-				width 100%
-				height 100%
+			overflow hidden
 		.option
 			height .1rem
 			position relative
