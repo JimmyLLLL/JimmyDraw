@@ -7,6 +7,9 @@
 		@touchstart="handleTouchStart"
 		@touchmove="handleTouchMove"
 		@touchend="handleTouchEnd"
+		@mousedown="handleMouseStart"
+		@mousemove="handleMouseMove"
+		@mouseup="handleMouseEnd"
 		>
         	<canvas class="canvasMain" 
         			ref="myCanvas" 
@@ -107,7 +110,30 @@ export default{
                 this.flag++;
             }
 		},
-		handleTouchEnd(){
+		handleTouchEnd(e){
+			this.isMouseDown=false;
+            this.flag=0;
+		},
+		handleMouseStart(e){
+			this.isMouseDown=true;
+            this.xs = e.clientX;
+            this.ys = e.clientY;
+            this.context.lineWidth=this.lineWidth;
+            this.context.strokeStyle=this.color;
+            this.adjust = this.canvasDom.getBoundingClientRect();
+            e.preventDefault && e.preventDefault();
+   			e.stopPropagation && e.stopPropagation();
+		},
+		handleMouseMove(e){
+			if(this.isMouseDown){
+                this.xe = e.clientX;
+                this.ye = e.clientY;
+                self = this;
+                this.drowline(self.xs,self.ys,self.xe,self.ye);
+                this.flag++;
+            }
+		},
+		handleMouseEnd(){
 			this.isMouseDown=false;
             this.flag=0;
 		},
